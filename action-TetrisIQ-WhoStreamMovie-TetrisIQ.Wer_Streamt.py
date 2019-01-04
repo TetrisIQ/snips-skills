@@ -225,8 +225,9 @@ def subscribe_intent_callback(hermes, intentMessage):
 
 def get_streaming_provider():
     ret = []
-    for st in str(conf['secret']['StreamingProvider']).split(','):
-        ret.append(id_to_name(int(st)))
+    provider = str(conf['secret']['StreamingProvider']).split(',')
+    for i in range(0,len(provider)):
+        ret.append(id_to_name(int(provider[i])))
     return ret
 
 
