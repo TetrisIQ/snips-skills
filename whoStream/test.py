@@ -4,14 +4,31 @@ from justwatch import JustWatch
 def id_to_name(id):
     if (id == 8):
         return "Netflix"
-    if (id == 9):
+    if (id == 10):
         return "Amazon Prime Video"
+    if (id==28):
+        return "netzkino.de"
+    if (id==171):
+        return "Watchbox"
     return str(id)
 
 
+def main():
+    print(get_best_provider())
+
+def get_best_provider():
+    conf = "8,10"
+    ret = []
+    for st in str(conf).split(','):
+        ret.append(id_to_name(int(st)))
+    return ret
+
+
+
 if __name__ == '__main__':
+    main()
     jw = JustWatch(country='DE')
-    r = jw.search_for_item(query='hangover')
+    r = jw.search_for_item(query='matrix')
     set = set()
     try:
         for i in range(0,len(r)):
