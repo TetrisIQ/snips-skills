@@ -229,7 +229,7 @@ def action_wrapper(hermes, intentMessage, conf):
         :param conf:
         :return:
         """
-        set = set()
+        messages = set()
         if len(intentMessage.slots.movie) > 0:
             movie = intentMessage.slots.movie.first().value
 
@@ -241,12 +241,12 @@ def action_wrapper(hermes, intentMessage, conf):
                         if r['items'][i]['offers'][j]['monetization_type'].__contains__('flatrate'):
                             titel = r['items'][i]['title']
                             provider_id = r['items'][i]['offers'][j]['provider_id']
-                            set.add("{} kann auf {} kostenlos angesehen werden".format(titel, id_to_name(provider_id)))
+                            messages.add("{} kann auf {} kostenlos angesehen werden".format(titel, id_to_name(provider_id)))
             except KeyError:
                 pass
-            print(set)
+            print(messages)
             msg = ""
-            for s in set:
+            for s in messages:
                 #say(intentMessage.sesession_id, s)
                 msg += s + "\n"
             hermes.publish_end_session(intentMessage.session_id, msg)
