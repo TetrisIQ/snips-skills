@@ -222,6 +222,25 @@ def subscribe_intent_callback(hermes, intentMessage):
     conf = read_configuration_file(CONFIG_INI)
     action_wrapper(hermes, intentMessage, conf)
 
+
+def who_stream_movie(hermes, intentMessage, conf):
+    messages = set()
+    if len(intentMessage.slots.movie) > 0:
+        movie = intentMessage.slots.movie.first().value
+        msg = ""
+        for s in trigger_api(movie):
+            for k in my_conf:
+                if s.__contains__(k):
+                    msg += s + "\n"
+        hermes.publish_end_session(intentMessage.session_id, msg)
+    else:
+        hermes.publish_end_session(intentMessage.session_id, "Error")
+
+
+def new_on_netflix(hermes, intentMessage, conf):
+    hermes.publish_end_session(intentMessage.session_id, "Zurzeit ist nichts neu bei netflix")
+
+
 def action_wrapper(hermes, intentMessage, conf):
         """
         :param hermes:
@@ -229,17 +248,11 @@ def action_wrapper(hermes, intentMessage, conf):
         :param conf:
         :return:
         """
-        messages = set()
-        if len(intentMessage.slots.movie) > 0:
-            movie = intentMessage.slots.movie.first().value
-            msg = ""
-            for s in trigger_api(movie):
-                for k in my_conf:
-                    if s.__contains__(k):
-                        msg += s + "\n"
-            hermes.publish_end_session(intentMessage.session_id, msg)
-        else:
-            hermes.publish_end_session(intentMessage.session_id, "Error")
+        if intentMessage.intent.intent_name == "TetrisIQ:WhoStreamMovie":
+            who_stream_movie(hermes, intentMessage, conf)
+        if intentMessage.intent.intent_name == "TetrisIQ:newOnNetflix":
+            new_on_netflix(hermes, intentMessage, conf);
+
 
 def trigger_api(movie):
     jw = JustWatch(country='DE')
@@ -251,7 +264,7 @@ def trigger_api(movie):
                 if r['items'][i]['offers'][j]['monetization_type'].__contains__('flatrate'):
                     titel = r['items'][i]['title']
                     provider_id = r['items'][i]['offers'][j]['provider_id']
-                    message.add("{} kann auf {} kostenlos angesehen werden".format(titel, id_to_name(provider_id)))
+                    message.add("{} kann auf {} kostenlos angesehen werden\n".format(titel, id_to_name(provider_id)))
     except KeyError:
         pass
     return message
