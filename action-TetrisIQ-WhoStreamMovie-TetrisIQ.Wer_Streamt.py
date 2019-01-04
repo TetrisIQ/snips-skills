@@ -244,7 +244,6 @@ def action_wrapper(hermes, intentMessage, conf):
                             messages.add("{} kann auf {} kostenlos angesehen werden".format(titel, id_to_name(provider_id)))
             except KeyError:
                 pass
-            print(messages)
             msg = ""
             for s in messages:
                 #say(intentMessage.sesession_id, s)
