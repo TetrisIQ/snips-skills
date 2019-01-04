@@ -1,4 +1,5 @@
 from justwatch import JustWatch
+my_conf = ['Netflix', 'Amazon Prime Video']
 
 
 def id_to_name(id):
@@ -14,7 +15,11 @@ def id_to_name(id):
 
 
 def main():
-    print(get_best_provider())
+    test =['nbhjbh Netflix', "hsadkjhj Amazon Prime "]
+    for s in test:
+        for k in my_conf:
+            if s.__contains__(k):
+                print("kkjh")
 
 def get_best_provider():
     conf = "8,10"

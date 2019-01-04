@@ -16,7 +16,7 @@ HEADER = {'User-Agent': 'JustWatch Python client (github.com/dawoudt/JustWatchAP
 
 CONFIGURATION_ENCODING_FORMAT = "utf-8"
 CONFIG_INI = "config.ini"
-conf = dict()
+my_conf = ['Netflix', 'Amazon Prime Video']
 
 class JustWatch:
     def __init__(self, country='AU', use_sessions=True, **kwargs):
@@ -222,16 +222,6 @@ def subscribe_intent_callback(hermes, intentMessage):
     conf = read_configuration_file(CONFIG_INI)
     action_wrapper(hermes, intentMessage, conf)
 
-
-def get_streaming_provider():
-    ret = []
-    print(conf['global']['StreamingProvider'])
-    provider = str(conf['secret']['StreamingProvider']).split(',')
-    for i in range(0,len(provider)):
-        ret.append(id_to_name(int(provider[i])))
-    return ret
-
-
 def action_wrapper(hermes, intentMessage, conf):
         """
         :param hermes:
@@ -242,11 +232,11 @@ def action_wrapper(hermes, intentMessage, conf):
         messages = set()
         if len(intentMessage.slots.movie) > 0:
             movie = intentMessage.slots.movie.first().value
-            streaming_provider = get_streaming_provider()
             msg = ""
             for s in trigger_api(movie):
-                if s.__contains__(streaming_provider):
-                    msg += s + "\n"
+                for k in my_conf:
+                    if s.__contains__(k):
+                        msg += s + "\n"
             hermes.publish_end_session(intentMessage.session_id, msg)
         else:
             hermes.publish_end_session(intentMessage.session_id, "Error")
