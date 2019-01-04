@@ -2,3 +2,4 @@
 hermes-python>=0.1
 requests>=2.0
 babel>=2.6
+paho-mqtt>=1.4
