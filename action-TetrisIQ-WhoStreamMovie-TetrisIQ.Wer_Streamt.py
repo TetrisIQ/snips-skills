@@ -229,12 +229,12 @@ def action_wrapper(hermes, intentMessage, conf):
         :param conf:
         :return:
         """
+        set = set()
         if len(intentMessage.slots.movie) > 0:
             movie = intentMessage.slots.movie.first().value
 
             jw = JustWatch(country='DE')
             r = jw.search_for_item(query=movie)
-            set = set()
             try:
                 for i in range(0, len(r)):
                     for j in range(0, len(r['items'][i]['offers'])):
