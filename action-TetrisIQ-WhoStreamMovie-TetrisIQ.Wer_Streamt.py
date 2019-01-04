@@ -16,7 +16,7 @@ HEADER = {'User-Agent': 'JustWatch Python client (github.com/dawoudt/JustWatchAP
 
 CONFIGURATION_ENCODING_FORMAT = "utf-8"
 CONFIG_INI = "config.ini"
-conf = ""
+conf = dict()
 
 class JustWatch:
     def __init__(self, country='AU', use_sessions=True, **kwargs):
@@ -225,7 +225,7 @@ def subscribe_intent_callback(hermes, intentMessage):
 
 def get_streaming_provider():
     ret = []
-    print(conf['secret']['StreamingProvider'])
+    print(conf['global']['StreamingProvider'])
     provider = str(conf['secret']['StreamingProvider']).split(',')
     for i in range(0,len(provider)):
         ret.append(id_to_name(int(provider[i])))
