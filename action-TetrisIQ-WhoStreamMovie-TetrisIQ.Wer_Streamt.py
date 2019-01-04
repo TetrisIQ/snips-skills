@@ -245,9 +245,11 @@ def action_wrapper(hermes, intentMessage, conf):
             except KeyError:
                 pass
             print(set)
+            msg = ""
             for s in set:
-                say(intentMessage.sesession_id, s)
-            #hermes.publish_end_session(intentMessage.session_id, movie)
+                #say(intentMessage.sesession_id, s)
+                msg += s + "\n"
+            hermes.publish_end_session(intentMessage.session_id, msg)
         else:
             hermes.publish_end_session(intentMessage.session_id, "Error")
     
