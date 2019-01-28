@@ -224,10 +224,10 @@ def subscribe_intent_callback(hermes, intentMessage):
 
 
 def who_stream_movie(hermes, intentMessage, conf):
-    messages = set()
+    msg = set()
     if len(intentMessage.slots.movie) > 0:
         movie = intentMessage.slots.movie.first().value
-        msg = ""
+        #msg = ""
         for s in trigger_api(movie):
             for k in my_conf:
                 if s.__contains__(k):
