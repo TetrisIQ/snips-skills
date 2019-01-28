@@ -18,5 +18,5 @@ fi
 . $VENV/bin/activate
 
 pip install -r requirements.txt
-cd $VENV/lib/python2.7/site-packages/
+cd . $VENV/lib/python2.7/site-packages/
 git clone https://github.com/dawoudt/JustWatchAPI
