@@ -16,7 +16,6 @@ HEADER = {'User-Agent': 'JustWatch Python client (github.com/dawoudt/JustWatchAP
 
 CONFIGURATION_ENCODING_FORMAT = "utf-8"
 CONFIG_INI = "config.ini"
-my_conf = ['Netflix', 'Amazon Prime Video']
 
 class JustWatch:
     def __init__(self, country='AU', use_sessions=True, **kwargs):
@@ -223,24 +222,6 @@ def subscribe_intent_callback(hermes, intentMessage):
     action_wrapper(hermes, intentMessage, conf)
 
 
-def who_stream_movie(hermes, intentMessage, conf):
-    msg = set()
-    if len(intentMessage.slots.movie) > 0:
-        movie = intentMessage.slots.movie.first().value
-        #msg = ""
-        for s in trigger_api(movie):
-            for k in my_conf:
-                if s.__contains__(k):
-                    msg += s + "\n"
-        hermes.publish_end_session(intentMessage.session_id, msg)
-    else:
-        hermes.publish_end_session(intentMessage.session_id, "Error")
-
-
-def new_on_netflix(hermes, intentMessage, conf):
-    hermes.publish_end_session(intentMessage.session_id, "Zurzeit ist nichts neu bei netflix")
-
-
 def action_wrapper(hermes, intentMessage, conf):
         """
         :param hermes:
@@ -248,24 +229,29 @@ def action_wrapper(hermes, intentMessage, conf):
         :param conf:
         :return:
         """
-        # if intentMessage.intent.intent_name == "TetrisIQ:WhoStreamMovie":
-        who_stream_movie(hermes, intentMessage, conf)
+        messages = set()
+        if len(intentMessage.slots.movie) > 0:
+            movie = intentMessage.slots.movie.first().value
 
+            jw = JustWatch(country='DE')
+            r = jw.search_for_item(query=movie)
+            try:
+                for i in range(0, len(r)):
+                    for j in range(0, len(r['items'][i]['offers'])):
+                        if r['items'][i]['offers'][j]['monetization_type'].__contains__('flatrate'):
+                            titel = r['items'][i]['title']
+                            provider_id = r['items'][i]['offers'][j]['provider_id']
+                            messages.add("{} kann auf {} kostenlos angesehen werden".format(titel, id_to_name(provider_id)))
+            except KeyError:
+                pass
+            msg = ""
+            for s in messages:
+                #say(intentMessage.sesession_id, s)
+                msg += s + "\n"
+            hermes.publish_end_session(intentMessage.session_id, msg)
+        else:
+            hermes.publish_end_session(intentMessage.session_id, "Error")
 
-def trigger_api(movie):
-    jw = JustWatch(country='DE')
-    r = jw.search_for_item(query=movie)
-    message = set()
-    try:
-        for i in range(0, len(r)):
-            for j in range(0, len(r['items'][i]['offers'])):
-                if r['items'][i]['offers'][j]['monetization_type'].__contains__('flatrate'):
-                    titel = r['items'][i]['title']
-                    provider_id = r['items'][i]['offers'][j]['provider_id']
-                    message.add("{} kann auf {} kostenlos angesehen werden\n".format(titel, id_to_name(provider_id)))
-    except KeyError:
-        pass
-    return message
 
 def id_to_name(id):
     if (id == 8):
