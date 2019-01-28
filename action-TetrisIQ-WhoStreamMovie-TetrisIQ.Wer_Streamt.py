@@ -248,8 +248,8 @@ def action_wrapper(hermes, intentMessage, conf):
         :param conf:
         :return:
         """
-        if intentMessage.intent.intent_name == "TetrisIQ:WhoStreamMovie":
-            who_stream_movie(hermes, intentMessage, conf)
+        # if intentMessage.intent.intent_name == "TetrisIQ:WhoStreamMovie":
+        who_stream_movie(hermes, intentMessage, conf)
 
 
 def trigger_api(movie):
