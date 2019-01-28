@@ -38,8 +38,6 @@ def action_wrapper(hermes, intentMessage, conf):
         :param conf:
         :return:
         """
-        if len(intentMessage.slots.movie) > 0:
-            movie = intentMessage.slots.movie.first().value
         if intentMessage.intent.intent_name == "CryptoWarrior:addToPlaylist":
             addToPlaylist(hermes)
 
