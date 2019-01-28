@@ -250,8 +250,6 @@ def action_wrapper(hermes, intentMessage, conf):
         """
         if intentMessage.intent.intent_name == "TetrisIQ:WhoStreamMovie":
             who_stream_movie(hermes, intentMessage, conf)
-        if intentMessage.intent.intent_name == "TetrisIQ:newOnNetflix":
-            new_on_netflix(hermes, intentMessage, conf);
 
 
 def trigger_api(movie):
